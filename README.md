@@ -4,7 +4,7 @@ Colección de funciones Bash para interactuar con la API de Shortcut y gestionar
 
 ## Manual
 
-Escribe `story` y se muestra las funciones disponibles, su uso y ejemplos:
+Escribe `story` o `stories` y se muestra las funciones disponibles, su uso y ejemplos:
 
 ![manual](https://github.com/user-attachments/assets/07244e05-3d73-4da8-9bce-ce59103d1261)
 
@@ -34,9 +34,8 @@ Ejemplos
 <img width="1844" height="1024" alt="image" src="https://github.com/user-attachments/assets/3196df13-82ed-41b1-b451-4a262b1e85e3" />
 
 
-### Úsalo aquí
+### Úsalo tu token aquí
 
-Definir variables en el entorno:
 ```bash
 API_BASE='https://api.app.shortcut.com/api/v3'
 TOKEN='<tu-shortcut-token>'
@@ -44,7 +43,7 @@ TOKEN='<tu-shortcut-token>'
 
 ## Uso
 
-### `storyb <ID>`
+### `story <ID>`
 Gestiona la rama asociada a una historia:
 1. Busca rama vinculada en Shortcut,
 2. Si no existe, busca rama local `sc-ID`.
@@ -53,7 +52,7 @@ Gestiona la rama asociada a una historia:
 
 Ejemplo:
 ```bash
-storyb 1234
+story 1234
 ```
 
 Tarea con rama vinculada, la encuentra también en local y se cambia a ella:
@@ -68,19 +67,29 @@ Tarea que no tienes su rama local aún, la crea y se cambia a ella:
 
 ---
 
-### `story <NOMBRE>`
+### `stories <NOMBRE>`
 Busca historias en Shortcut por nombre.
 - Sin argumentos: muestra ayuda con flujo y ejemplos.
 - Con nombre: devuelve lista `ID | Título`.
 
 Ejemplo:
 ```bash
-story focus
+stories focus
 ```
 
 ![buscar](https://github.com/user-attachments/assets/9fed318c-7bd1-49c7-94fa-9e8a42714478)
 
 
+---
 
-## Notas
-- Requiere `jq` y `git` instalados.
+## Changelog
+
+### [1.2.0] - 2025-08-11
+- Refactorización de nombres de funciones para mayor claridad y mejor alineación con el endpoint de la API (`stories`)
+  - `storyb` → `story` (gestión de ramas)
+  - `story` → `stories` (búsqueda de historias)
+
+### [1.0.0] - 2025-08-09
+- Initial release
+- Basic story management functionality
+- Branch creation, switching and simple search

@@ -2,7 +2,7 @@
 
 # Shortcut API & Token
 API_BASE='https://api.app.shortcut.com/api/v3'
-TOKEN='55a19524-e937-4ec8-9ad9-dab226c88e17'
+TOKEN='<your-Shortcut-token>'
 
 # Shortcut Fetcher
 sc_fetch() { curl -s "$API_BASE/$1" -H "Shortcut-Token: $TOKEN" | tr -d '\r'; }
@@ -41,10 +41,37 @@ _generate_branch_name() {
   echo "${prefix}/sc-${id}-${name}"
 }
 
+# Show help manual
+_show_help() {
+  cat << 'EOF'
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Shortcut CLI Help
+
+  story <ID>
+
+  Flujo inteligente:
+    1. Busca rama vinculada en Shortcut
+    2. Comprueba si existe en local
+    3. La crea con formato acordado FEAT/sc-1234-name | BF/sc-1234-name
+    4. Checkout automático
+
+  
+  stories <NAME>
+
+  Buscar por nombre en Shortcut.
+
+  Ejemplos:
+    story 1234
+    stories fellow
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EOF
+}
+
 # Main branch command
-storyb() {
+story() {
  local id=$1
- [[ -z $id ]] && return 1
+ [[ -z $id ]] && _show_help && return 1
  
  local story=$(sc_fetch "stories/$id")
  local branch_info=$(_find_existing_branch "$id" "$story")
@@ -61,31 +88,9 @@ storyb() {
 }
 
 # Search stories
-story() {
+stories() {
  if [[ -z $1 ]]; then
-   cat << 'EOF'
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Shortcut CLI Help
-
-  storyb <ID>
-
-  Flujo inteligente:
-    1. Busca rama vinculada en Shortcut
-    2. Comprueba si existe en local
-    3. La crea con formato acordado FEAT/sc-1234-name | BF/sc-1234-name
-    4. Checkout automático
-
-  
-  story <NAME>
-
-  Buscar por nombre en Shortcut.
-
-  Ejemplos:
-    storyb 1234
-    story fellow
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-EOF
+   _show_help
    return 1
  fi
  
