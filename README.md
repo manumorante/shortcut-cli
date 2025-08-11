@@ -6,7 +6,8 @@ Colección de funciones Bash para interactuar con la API de Shortcut y gestionar
 
 Escribe `story` o `stories` y se muestra las funciones disponibles, su uso y ejemplos:
 
-![manual](https://github.com/user-attachments/assets/07244e05-3d73-4da8-9bce-ce59103d1261)
+<img width="766" height="529" alt="Captura de pantalla 2025-08-11 a las 17 08 50" src="https://github.com/user-attachments/assets/ac99ff9b-59ac-4a88-8772-9798b71c167e" />
+
 
 ## Formato
 
@@ -57,6 +58,7 @@ story 1234
 
 Tarea con rama vinculada, la encuentra también en local y se cambia a ella:
 
+ℹ️ TODO: actualizar GIF con nuevos nombres de funciones
 ![lessons](https://github.com/user-attachments/assets/3c4218d4-e169-4208-95f5-e9dba1dfc582)
 
 Tarea que no tienes su rama local aún, la crea y se cambia a ella:
