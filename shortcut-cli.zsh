@@ -37,8 +37,8 @@ _generate_branch_name() {
   local id=$1 story=$2
   local name=$(jq -r '.name // empty' <<< "$story" | tr '[:upper:]' '[:lower:]' | tr -cs '[:alnum:]' '-' | sed 's/-$//')
   local type=$(jq -r '.story_type // empty' <<< "$story")
-  local prefix=$([[ $type == "bug" ]] && echo "BF" || echo "FEAT")
-  echo "${prefix}/sc-${id}-${name}"
+  local prefix=$([[ $type == "bug" ]] && echo "bf" || echo "feat")
+  echo "${prefix}/${name}-sc-${id}"
 }
 
 # Show help manual
@@ -52,7 +52,7 @@ _show_help() {
   Flujo inteligente:
     1. Busca rama vinculada en Shortcut
     2. Comprueba si existe en local
-    3. La crea con formato acordado FEAT/sc-1234-name | BF/sc-1234-name
+    3. La crea con formato acordado feat/name-sc-1234 | bf/name-sc-1234
     4. Checkout automático
 
   
