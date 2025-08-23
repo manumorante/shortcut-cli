@@ -86,6 +86,9 @@ stories focus
 
 ## Changelog
 
+### [1.3.0] - 2025-08-23
+- Formato de nombres de ramas actualizado - El ID de Shortcut ahora aparece al final y se usan minúsculas
+
 ### [1.2.0] - 2025-08-11
 - Refactorización de nombres de funciones para mayor claridad y mejor alineación con el endpoint de la API (`stories`)
   - `storyb` → `story` (gestión de ramas)
