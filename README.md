@@ -86,6 +86,13 @@ stories focus
 
 ## Changelog
 
+### [1.4.0] - 2025-01-27
+- Mejora en detección de ramas locales existentes
+  - Ahora busca ramas que contengan el ID en cualquier parte del nombre.
+- Resolución de conflictos entre ramas de Shortcut y locales
+  - Detecta cuando existe una rama vinculada en Shortcut pero hay otra rama local diferente con el mismo ID.
+  - Confirmación interactiva para elegir entre rama de Shortcut o rama local en caso de conflicto.
+
 ### [1.3.0] - 2025-08-23
 - Formato de nombres de ramas actualizado - El ID de Shortcut ahora aparece al final y se usan minúsculas
 

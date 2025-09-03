@@ -19,15 +19,23 @@ _checkout_branch() {
 # Find existing branch (Shortcut or local)
 _find_existing_branch() {
   local id=$1 story=$2
-  local branch from
+  local shortcut_branch local_branch
   
-  # Try Shortcut first
-  branch=$(jq -r '.branches[0].name // empty' <<< "$story" 2>/dev/null)
-  [[ -n $branch ]] && from="Shortcut" && echo "$branch|$from" && return 0
+  # Get Shortcut branch
+  shortcut_branch=$(jq -r '.branches[0].name // empty' <<< "$story" 2>/dev/null)
   
-  # Try local git
-  branch=$(git branch -a 2>/dev/null | grep -E "sc-$id(-|$)" | head -1 | sed 's/^[* ]*//' | sed 's/^remotes\/origin\///')
-  [[ -n $branch ]] && from="local" && echo "$branch|$from" && return 0
+  # Get local branch with same ID
+  local_branch=$(git branch -a 2>/dev/null | grep "sc-$id" | head -1 | sed 's/^[* ]*//' | sed 's/^remotes\/origin\///')
+  
+  # Both exist but different names
+  if [[ -n $shortcut_branch && -n $local_branch && $shortcut_branch != $local_branch ]]; then
+    echo "CONFLICT|$shortcut_branch|$local_branch"
+    return 2
+  fi
+  
+  # Return existing branch
+  [[ -n $shortcut_branch ]] && echo "$shortcut_branch|Shortcut" && return 0
+  [[ -n $local_branch ]] && echo "$local_branch|local" && return 0
   
   echo "||" && return 1
 }
@@ -51,7 +59,7 @@ _show_help() {
 
   Flujo inteligente:
     1. Busca rama vinculada en Shortcut
-    2. Comprueba si existe en local
+    2. Comprueba si existe una rama en local con sc-1234
     3. La crea con formato acordado feat/name-sc-1234 | bf/name-sc-1234
     4. Checkout automático
 
@@ -76,7 +84,21 @@ story() {
  local story=$(sc_fetch "stories/$id")
  local branch_info=$(_find_existing_branch "$id" "$story")
  
- if [[ $branch_info != "||" ]]; then
+ if [[ $branch_info == "CONFLICT"* ]]; then
+   IFS='|' read -r _ shortcut_branch local_branch <<< "$branch_info"
+   echo "Conflicto detectado:"
+   echo " Shortcut: $shortcut_branch"
+   echo " Local:    $local_branch"
+   echo -n "¿Usar rama local? (y/n): "
+   read -r response
+   if [[ $response =~ ^[Yy]$ ]]; then
+     echo "Usando rama local → $local_branch"
+     _checkout_branch "$local_branch"
+   else
+     echo "Usando rama Shortcut → $shortcut_branch"
+     _checkout_branch "$shortcut_branch"
+   fi
+ elif [[ $branch_info != "||" ]]; then
    IFS='|' read -r branch from <<< "$branch_info"
    echo "Rama $from → $branch"
    _checkout_branch "$branch"
